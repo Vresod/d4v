@@ -1,9 +1,14 @@
 import discord
 import random
-
+from discord.ext import commands
 
 client = commands.Bot(command_prefix='d4v!')
 
+
+client = discord.Client()
+
+
+client.run('ODE0ODM2NTQ4NzMzNzYzNjQ1.YDjprA.AormX6srsNBN4DN1igr1CXUkjvw')
 
 
 @client.event
@@ -11,17 +16,27 @@ async def on_ready():
 	print('Dojyan!')
 
 
+@client.command
+async def reserve(message, *, stand):
+        channel = message.channel
+        if stand == 'The World':
+        	await channel.send('The World')
+        if stand == 'Star Platinum':
+        	await channel.send('Star Platinum')
+        if stand == 'Silver Chariot':
+        	await channel.send('Silver Chariot')
+
 @client.command()
-async def the_world(ctx):
-		the_world = discord.utils.get(ctx.guild.roles, the_world.id==815225512996634635),
-		for guild in client.guilds:
-			for member in guild.members:
-  				await ctx.author.add_roles(the_world)
+async def ping(ctx):
+	await ctx.send(f'Pong! {round(client.latency*1000)}ms')
 
 
-
-
-
+#@client.event()
+#async def on_message(ctx):
+#		the_world = discord.utils.get(ctx.guild.roles, the_world.id==815225512996634635),
+#		guild = message.guild
+#			for member in guild.members:
+#				await ctx.author.add_roles(the_world)
 
 
 
@@ -47,9 +62,7 @@ async def the_world(ctx):
 #	await ctx.send(f'**Question: {question}**\n*Answer:{random.choice(responses)}*')
 
 
-#@client.command()
-#async def ping(ctx):
-#	await ctx.send(f'Pong! {round(client.latency*1000)}ms')
+
 
 
 
@@ -85,4 +98,3 @@ async def the_world(ctx):
 
 
 
-client.run('ODE0ODM2NTQ4NzMzNzYzNjQ1.YDjprA.AormX6srsNBN4DN1igr1CXUkjvw')
