@@ -3,8 +3,7 @@ import discord
 import random
 import health
 
-intents = discord.Intents.default()
-intents.members = True
+intents = discord.Intents.all()
 client = commands.Bot(command_prefix='d4v!', intents=intents)
 
 with open("tokenfile", "r") as tokenfile:
@@ -38,5 +37,48 @@ async def reserve(ctx):
 			await ctx.channel.send(f"you now have {standwanted.name}!")
 		else:
 			await ctx.channel.send(f"{standwanted.members[0].name} already has {standwanted.name}")
+
+#def getcooldown(): 
+#	
+#	joe = discord.utils.get(client.guilds, id=814836159821250661)
+#	
+#	for x in joe.channels:
+#		ctx = x.history[0]
+#
+#		if not ctx.content.startswith("d4v!"):
+#			continue
+#
+#		if theworld in ctx.author.roles:
+#			return 3
+#		elif thehand in ctx.author.roles:
+#			return 4
+#		elif starplatinum in ctx.author.roles:
+#			return 3
+#		elif silverchariot in ctx.author.roles:
+#			return 1
+
+# @commands.cooldown(1, getcooldown(), commands.BucketType.user)
+@client.command(aliases=["p"],brief="ORAAAA!")
+async def punch(ctx):
+
+	theworld = discord.utils.get(ctx.guild.roles, id=816244945580982282)
+	thehand = discord.utils.get(ctx.guild.roles, id=816244947761102850)
+	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
+	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
+
+	stands = [thehand, theworld, starplatinum, silverchariot]
+
+	punched = ctx.message.mentions[0]
+	puncher = ctx.author
+
+	if theworld in puncher.roles:
+		await health.changehealth(user=punched, add=0, subtract=17)
+	elif thehand in puncher.roles:
+		await health.changehealth(user=punched, add=0, subtract=15)
+	elif starplatinum in puncher.roles:
+		await health.changehealth(user=punched, add=0, subtract=20)
+	elif silverchariot in puncher.roles:
+		await health.changehealth(user=punched, add=0, subtract=10)
+
 
 client.run(token)
