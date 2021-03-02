@@ -1,5 +1,6 @@
 import discord
 import random
+import health
 
 intents = discord.Intents.default()
 intents.members = True
@@ -28,7 +29,7 @@ async def on_message(message):
 	args = argsraw.split(" ")
 
 	if message.content.lower().startswith(prefix):
-		if args[0] == "reserve":
+		if args[0] == "reserve" or args[0] == "r":
 			try:
 				standwanted = message.role_mentions[0]
 			except IndexError:
