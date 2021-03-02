@@ -5,7 +5,7 @@ import health
 
 intents = discord.Intents.default()
 intents.members = True
-client = commands.Bot(command_prefix='d4v!', help_command=None, intents=intents)
+client = commands.Bot(command_prefix='d4v!', intents=intents)
 
 with open("tokenfile", "r") as tokenfile:
 	token=tokenfile.read()
@@ -14,7 +14,7 @@ with open("tokenfile", "r") as tokenfile:
 async def on_ready():
 	print('Dojyan!')
 
-@client.command()
+@client.command(aliases=["r"],brief="reserve a stand")
 async def reserve(ctx):
 
 	theworld = discord.utils.get(ctx.guild.roles, id=816244945580982282)
