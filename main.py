@@ -2,6 +2,7 @@ from discord.ext import commands
 import discord
 import random
 import health
+import json
 
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix='d4v!', intents=intents)
@@ -80,6 +81,32 @@ async def punch(ctx):
 	elif silverchariot in puncher.roles:
 		await health.changehealth(user=punched, add=0, subtract=10)
 
-	await ctx.channel.send(f"{puncher.name} punched {punched}")    
+	await ctx.channel.send(f"{puncher.name} punched {punched.name}")    
+
+@client.command(aliases=["i"],brief="get info on a user's health and stand")
+async def info(ctx):
+
+	with open("health.json", "rt") as healthraw: # opens health.json
+		health = json.loads(healthraw.read()) # sets the health varible to the contents of health.json
+
+	theworld = discord.utils.get(ctx.guild.roles, id=816244945580982282)
+	thehand = discord.utils.get(ctx.guild.roles, id=816244947761102850)
+	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
+	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
+
+	stands = [thehand, theworld, starplatinum, silverchariot]
+
+	if ctx.message.mentions == []:
+		InfoOn = ctx.author
+	else:
+		InfoOn = ctx.message.mentions[0]
+
+	for x in stands:
+		if x in InfoOn.roles:
+			try:
+				await ctx.message.channel.send(f"{InfoOn} has `{health[str(InfoOn.id)]}` health\n{InfoOn}'s stand is {x.name}")
+			except KeyError:
+				await ctx.message.channel.send(f"{InfoOn}'s stand is {x.name}")
+			return
 
 client.run(token)
