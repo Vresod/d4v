@@ -18,5 +18,5 @@ async def changehealth(user, add, subtract):
 		health[id] += add # adds what it was told to
 		print(f"{user} didnt have health but now they do")
 
-	with open("health.json", "rt") as healthraw: # opens health.json
+	with open("health.json", "wt") as healthraw: # opens health.json
 		healthraw.write(json.dumps(health)) # write the above changes to health.json
