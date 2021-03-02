@@ -80,5 +80,6 @@ async def punch(ctx):
 	elif silverchariot in puncher.roles:
 		await health.changehealth(user=punched, add=0, subtract=10)
 
+	await ctx.channel.send(f"{puncher.name} punched {punched}")    
 
 client.run(token)

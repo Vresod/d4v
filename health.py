@@ -5,7 +5,7 @@ import json
 async def changehealth(user, add, subtract):
 
 	with open("health.json", "rt") as healthraw: # opens health.json
-		health = json.loads(rawhealth.read()) # sets the health varible to the contents of health.json
+		health = json.loads(healthraw.read()) # sets the health varible to the contents of health.json
 
 	id = str(user.id)
 	
