@@ -1,7 +1,7 @@
 from discord.ext import commands
 import discord
 import random
-import health
+from health import *
 import json
 
 intents = discord.Intents.all()
@@ -77,17 +77,18 @@ async def punch(ctx):
 	puncher = ctx.author
 
 	if theworld in puncher.roles:
-		await health.changehealth(user=punched, add=0, subtract=17)
+		await changehealth(user=punched, add=0, subtract=17)
 	elif thehand in puncher.roles:
-		await health.changehealth(user=punched, add=0, subtract=15)
+		await changehealth(user=punched, add=0, subtract=15)
 	elif starplatinum in puncher.roles:
-		await health.changehealth(user=punched, add=0, subtract=20)
+		await changehealth(user=punched, add=0, subtract=20)
 	elif silverchariot in puncher.roles:
-		await health.changehealth(user=punched, add=0, subtract=10)
+		await changehealth(user=punched, add=0, subtract=10)
 	elif crazydiamond in puncher.roles:
-		await health.changehealth(user=punched, add=0, subtract=14)
+		await changehealth(user=punched, add=0, subtract=14)
 
 	await ctx.channel.send(f"{puncher.name} punched {punched.name}")    
+
 
 @client.command(aliases=["i"],brief="get info on a user's health and stand")
 async def info(ctx):
@@ -101,7 +102,7 @@ async def info(ctx):
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 
-	stands = [thehand, theworld, starplatinum, silverchariot, silverchariot]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond]
 
 	if ctx.message.mentions == []:
 		InfoOn = ctx.author
@@ -110,10 +111,20 @@ async def info(ctx):
 
 	for x in stands:
 		if x in InfoOn.roles:
-			try:
-				await ctx.message.channel.send(f"{InfoOn} has `{health[str(InfoOn.id)]}` health\n{InfoOn}'s stand is {x.name}")
-			except KeyError:
-				await ctx.message.channel.send(f"{InfoOn}'s stand is {x.name}")
-			return
+			InfoOnStand = x
+			break
+		else:
+			InfoOnStand = None
+	
+	try:
+		embed = discord.Embed(title=f"{InfoOn}'s Info", colour=discord.Colour(0xabe05f), description=f"Stand: {InfoOnStand}\nHealth: {health[str(InfoOn.id)]}")
+	except KeyError:
+		await changehealth(user=InfoOn, add=0, subtract=0)
+		with open("health.json", "rt") as healthraw: # reopens health.json
+			health = json.loads(healthraw.read()) # sets the health varible to the contents of health.json
+		embed = discord.Embed(title=f"{InfoOn}'s Info", colour=discord.Colour(0xabe05f), description=f"Stand: {InfoOnStand}\nHealth: {health[str(InfoOn.id)]}")
+
+		
+	await ctx.message.channel.send(embed=embed)
 
 client.run(token)
