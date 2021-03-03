@@ -21,8 +21,9 @@ async def reserve(ctx):
 	thehand = discord.utils.get(ctx.guild.roles, id=816244947761102850)
 	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
+	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 
-	stands = [thehand, theworld, starplatinum, silverchariot]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond]
 
 	try:
 		standwanted = ctx.message.role_mentions[0]
@@ -57,6 +58,8 @@ async def reserve(ctx):
 #			return 3
 #		elif silverchariot in ctx.author.roles:
 #			return 1
+#		elif crazydiamond in ctx.author.roles:
+#			return 2
 
 # @commands.cooldown(1, getcooldown(), commands.BucketType.user)
 @client.command(aliases=["p"],brief="ORAAAA!")
@@ -66,8 +69,9 @@ async def punch(ctx):
 	thehand = discord.utils.get(ctx.guild.roles, id=816244947761102850)
 	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
+	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 
-	stands = [thehand, theworld, starplatinum, silverchariot]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond]
 
 	punched = ctx.message.mentions[0]
 	puncher = ctx.author
@@ -80,6 +84,8 @@ async def punch(ctx):
 		await health.changehealth(user=punched, add=0, subtract=20)
 	elif silverchariot in puncher.roles:
 		await health.changehealth(user=punched, add=0, subtract=10)
+	elif crazydiamond in puncher.roles:
+		await health.changehealth(user=punched, add=0, subtract=14)
 
 	await ctx.channel.send(f"{puncher.name} punched {punched.name}")    
 
@@ -93,8 +99,9 @@ async def info(ctx):
 	thehand = discord.utils.get(ctx.guild.roles, id=816244947761102850)
 	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
+	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 
-	stands = [thehand, theworld, starplatinum, silverchariot]
+	stands = [thehand, theworld, starplatinum, silverchariot, silverchariot]
 
 	if ctx.message.mentions == []:
 		InfoOn = ctx.author
