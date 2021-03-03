@@ -22,6 +22,7 @@ async def reserve(ctx):
 	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
+	NoTimeStop = discord.utils.get(ctx.guild.roles, id=816382645964636180)
 
 	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond]
 
@@ -36,6 +37,8 @@ async def reserve(ctx):
 				return
 		if standwanted.members == []:
 			await ctx.author.add_roles(standwanted)
+			if standwanted == theworld or standwanted == starplatinum:
+				await ctx.author.remove_roles(NoTimeStop)
 			await ctx.channel.send(f"you now have {standwanted.name}!")
 		else:
 			await ctx.channel.send(f"{standwanted.members[0].name} already has {standwanted.name}")
@@ -126,5 +129,16 @@ async def info(ctx):
 
 		
 	await ctx.message.channel.send(embed=embed)
+
+
+
+
+
+@client.event
+async def on_member_join(member):
+	
+	NoTimeStop = discord.utils.get(member.guild.roles, id=816382645964636180)
+
+	await member.add_roles(NoTimeStop)
 
 client.run(token)
