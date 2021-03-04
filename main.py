@@ -52,15 +52,15 @@ async def reserve(ctx):
 
 @client.command(aliases=["ts","st","timestop","stoptime","stop_time"],brief="za warudo toki wo tomare")
 async def time_stop(ctx):
-	channel = ctx.channel,
-	guild = ctx.guild,
-	theworld = discord.utils.get(ctx.guild.roles, id=816244945580982282),
-	cantstoptime = discord.utils.get(ctx.guild.roles, id=816382645964636180),
+	channel = ctx.channel
+	guild = ctx.guild
+	theworld = discord.utils.get(ctx.guild.roles, id=816244945580982282)
+	cantstoptime = discord.utils.get(ctx.guild.roles, id=816382645964636180)
 	if not theworld in ctx.author.roles:
 		return
-	await ctx.channel.set_permissions(cantstoptime, send_messages=False)
-	asyncio.sleep(9)
-	await ctx.channel.set_permissions(cantstoptime, send_messages=True)
+	await ctx.channel.set_permissions(guild.get_role(816382645964636180), send_messages=False, read_messages=False)
+	await asyncio.sleep(9)
+	await ctx.channel.set_permissions(guild.get_role(816382645964636180), send_messages=True, read_messages=True)
 
 
 
