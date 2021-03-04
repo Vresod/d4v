@@ -111,7 +111,7 @@ async def info(ctx):
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 
-	stands = [thehand, theworld, starplatinum, silverchariot, silverchariot]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond]
 
 	if ctx.message.mentions == []:
 		InfoOn = ctx.author
@@ -121,10 +121,16 @@ async def info(ctx):
 	for x in stands:
 		if x in InfoOn.roles:
 			try:
-				await ctx.message.channel.send(f"{InfoOn} has `{health[str(InfoOn.id)]}` health\n{InfoOn}'s stand is {x.name}")
+				embed = discord.Embed(title=f"{InfoOn}'s Info'", colour=discord.Colour(0xf8e257), description=f"health: {health[str(InfoOn.id)]} hp\nstand: {x.name}")
+				await ctx.channel.send(embed=embed)
 			except KeyError:
 				await ctx.message.channel.send(f"{InfoOn}'s stand is {x.name}")
+				await ctx.channel.send(embed=embed)
 			return
+		elif x == stands[-1]:
+			embed = discord.Embed(title=f"{InfoOn}'s Info'", colour=discord.Colour(0xf8e257), description=f"health: 200 hp\nstand: none")
+			await ctx.channel.send(embed=embed)
+
 
 
 
