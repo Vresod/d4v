@@ -20,7 +20,7 @@ async def on_member_join(member):
 
 @client.command(aliases=["sf","starfinger"],brief="finger goes brrr")
 async def star_finger(ctx,member):
-	target = ctx.mentions[0]
+	target = ctx.message.mentions[0]
 	user = ctx.author
 	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
 	if not starplatinum in ctx.author.roles:
