@@ -5,11 +5,6 @@ import health
 import json
 import asyncio
 
-
-
-
-
-
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix='d4v!', intents=intents)
 
@@ -17,8 +12,6 @@ client = commands.Bot(command_prefix='d4v!', intents=intents)
 async def on_member_join(member):
 	cantstoptime = discord.utils.get(guild.roles, id=816382645964636180),
 	await member.add_roles(cantstoptime)
-
-
 
 with open("tokenfile", "r") as tokenfile:
 	token=tokenfile.read()
@@ -55,42 +48,26 @@ async def time_stop(ctx):
 	channel = ctx.channel
 	guild = ctx.guild
 	theworld = discord.utils.get(ctx.guild.roles, id=816244945580982282)
+	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
 	cantstoptime = discord.utils.get(ctx.guild.roles, id=816382645964636180)
-	if not theworld in ctx.author.roles:
-		return
-	await ctx.channel.set_permissions(guild.get_role(816382645964636180), send_messages=False, read_messages=False)
-	await asyncio.sleep(9)
-	await ctx.channel.set_permissions(guild.get_role(816382645964636180), send_messages=True, read_messages=True)
+	if theworld in ctx.author.roles:
+		await ctx.channel.category.set_permissions(guild.get_role(816382645964636180), send_messages=False, read_messages=False)
+		await channel.send("time stopped")
+		await asyncio.sleep(9)
+		await ctx.channel.category.set_permissions(guild.get_role(816382645964636180), send_messages=True, read_messages=True)
+		await channel.send("time resumed")
+	elif starplatinum in ctx.author.roles:
+		await ctx.channel.category.set_permissions(guild.get_role(816382645964636180), send_messages=False, read_messages=False)
+		await channel.send("time stopped")
+		await asyncio.sleep(5)
+		await ctx.channel.category.set_permissions(guild.get_role(816382645964636180), send_messages=True, read_messages=True)
+		await channel.send("time resumed")
 
-
-
-
-
-
-#def getcooldown(): 
-#	
-#	joe = discord.utils.get(client.guilds, id=814836159821250661)
-#	
-#	for x in joe.channels:
-#		ctx = x.history[0]
-#
-#		if not ctx.content.startswith("d4v!"):
-#			continue
-#
-#		if theworld in ctx.author.roles:
-#			return 3
-#		elif thehand in ctx.author.roles:
-#			return 4
-#		elif starplatinum in ctx.author.roles:
-#			return 3
-#		elif silverchariot in ctx.author.roles:
-#			return 1
-#		elif crazydiamond in ctx.author.roles:
-#			return 2
-
-# @commands.cooldown(1, getcooldown(), commands.BucketType.user)
 @client.command(aliases=["p"],brief="ORAAAA!")
 async def punch(ctx):
+
+	joe = client.get_guild(814836159821250661)
+	print(joe)
 
 	theworld = discord.utils.get(ctx.guild.roles, id=816244945580982282)
 	thehand = discord.utils.get(ctx.guild.roles, id=816244947761102850)
