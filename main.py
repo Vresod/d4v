@@ -41,6 +41,7 @@ async def reserve(ctx):
 			if x in ctx.author.roles:
 				await ctx.channel.send(f"you have lost {x.name}")
 				await ctx.author.add_role(cantstoptime)
+				await ctx.author.remove_role(x)
 				return
 		if standwanted.members == []:
 			if standwanted == theworld or standwanted == starplatinum:
