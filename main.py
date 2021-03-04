@@ -27,7 +27,11 @@ async def reserve(ctx):
 	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
+
+	cantstoptime = discord.utils.get(ctx.guild.roles, id=816382645964636180)
+
 	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond]
+
 	try:
 		standwanted = ctx.message.role_mentions[0]
 	except IndexError:
@@ -35,9 +39,12 @@ async def reserve(ctx):
 	if standwanted in stands:
 		for x in stands:
 			if x in ctx.author.roles:
-				await ctx.channel.send(f"you already have {x.name}")
+				await ctx.channel.send(f"you have lost {x.name}")
+				await ctx.author.add_role(cantstoptime)
 				return
 		if standwanted.members == []:
+			if standwanted == theworld or standwanted == starplatinum:
+				await ctx.author.remove_role(cantstoptime)
 			await ctx.author.add_roles(standwanted)
 			await ctx.channel.send(f"you now have {standwanted.name}!")
 		else:
@@ -65,9 +72,6 @@ async def time_stop(ctx):
 
 @client.command(aliases=["p"],brief="ORAAAA!")
 async def punch(ctx):
-
-	joe = client.get_guild(814836159821250661)
-	print(joe)
 
 	theworld = discord.utils.get(ctx.guild.roles, id=816244945580982282)
 	thehand = discord.utils.get(ctx.guild.roles, id=816244947761102850)
