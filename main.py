@@ -49,27 +49,28 @@ async def reserve(ctx):
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 	cantstoptime = discord.utils.get(ctx.guild.roles, id=816382645964636180)
+	
 	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond]
+	
 	for x in stands:
 		if x in ctx.author.roles:
 			await ctx.author.remove_roles(x)
+			await ctx.channel.send(f"you have lost {x.name}")
 			return
-		if not x in ctx.author.roles:
-			try:
-				standwanted = ctx.message.role_mentions[0]
-			except IndexError:
-				return
-			if standwanted in stands:
-				if standwanted.members == []:
-					await ctx.author.add_roles(standwanted)
-					await ctx.channel.send(f"You now have {standwanted.name}!")
-					if standwanted == theworld:
-						await ctx.author.remove_roles(cantstoptime)
-					if standwanted == starplatinum:
-						await ctx.author.remove_roles(cantstoptime)
-					return
-				else:
-					await ctx.channel.send(f"{standwanted.members[0].name} already has {standwanted.name}")
+	
+	try:
+		standwanted = ctx.message.role_mentions[0]
+	except IndexError:
+		return
+	
+	if standwanted in stands:
+		if standwanted.members == []:
+			await ctx.author.add_roles(standwanted)
+			await ctx.channel.send(f"You now have {standwanted.name}!")
+			if standwanted == theworld or standwanted == starplatinum:
+				await ctx.author.remove_roles(cantstoptime)
+		else:
+			await ctx.channel.send(f"{standwanted.members[0].name} already has {standwanted.name}")
 
 @client.command(aliases=["ts","st","timestop","stoptime","stop_time"],brief="za warudo toki wo tomare")
 async def time_stop(ctx):
