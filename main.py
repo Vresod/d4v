@@ -45,20 +45,18 @@ async def reserve(ctx):
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 	cantstoptime = discord.utils.get(ctx.guild.roles, id=816382645964636180)
 	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond]
+	
+	for x in stands:
+		if x in ctx.author.roles:
+			await ctx.author.remove_roles(x)
+			await ctx.author.add_roles(cantstoptime)
+			await ctx.channel.send(f"you have lost {x.name}")
+			return
 	try:
 		standwanted = ctx.message.role_mentions[0]
 	except IndexError:
 		return
 	if standwanted in stands:
-		for x in stands:
-			if x in ctx.author.roles:
-				await ctx.author.remove_roles(thehand)
-				await ctx.author.remove_roles(silverchariot)
-				await ctx.author.remove_roles(crazydiamond)
-				await ctx.author.remove_roles(theworld)
-				await ctx.author.remove_roles(starplatinum)
-				await ctx.author.add_roles(cantstoptime)
-				return
 		if standwanted.members == []:
 			await ctx.author.add_roles(standwanted)
 			await ctx.channel.send(f"You now have {standwanted.name}!")
