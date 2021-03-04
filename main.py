@@ -94,7 +94,7 @@ async def punch(ctx, mentionuser):
 
 
 @client.command(aliases=["i"],brief="get info on a user's health and stand")
-async def info(ctx, mentionuser):
+async def info(ctx):
 
 	with open("health.json", "rt") as healthraw: # opens health.json
 		health = json.loads(healthraw.read()) # sets the health varible to the contents of health.json
