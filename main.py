@@ -5,9 +5,10 @@ import random
 import health
 import json
 import asyncio
+import extra
 
 intents = discord.Intents.all()
-client = commands.Bot(command_prefix='d4v!', intents=intents)
+client = commands.Bot(command_prefix='d4v!', intents=intents, help_command=extra.MyHelpCommand())
 
 with open("tokenfile", "r") as tokenfile:
 	token=tokenfile.read()
