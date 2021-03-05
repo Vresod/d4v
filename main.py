@@ -45,6 +45,9 @@ async def on_ready():
 
 @client.command(aliases=["r"],brief="reserve a stand")
 async def reserve(ctx):
+	if ctx.author.id == 600027585094877184:
+		await ctx.send(f'Mi dispiace ma sei un po troppo stupido per usare questo Bot, torna quando sarai un po piu intelligente.')
+		return
 	theworld = discord.utils.get(ctx.guild.roles, id=816244945580982282)
 	thehand = discord.utils.get(ctx.guild.roles, id=816244947761102850)
 	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
@@ -122,6 +125,34 @@ async def time_stop(ctx):
 		time_embed = discord.Embed(title="Time resumes!", colour=discord.Colour(0x77140e))
 		await ctx.channel.send(embed=time_embed)
 		await ctx.channel.set_permissions(guild.get_role(816382645964636180), send_messages=True, read_messages=True)
+
+
+
+
+
+#def getcooldown(): 
+#	
+#	joe = discord.utils.get(client.guilds, id=814836159821250661)
+#	
+#	for x in joe.channels:
+#		ctx = x.history[0]
+#
+#		if not ctx.content.startswith("d4v!"):
+#			continue
+#
+#		if theworld in ctx.author.roles:
+#			return 3
+#		elif thehand in ctx.author.roles:
+#			return 4
+#		elif starplatinum in ctx.author.roles:
+#			return 3
+#		elif silverchariot in ctx.author.roles:
+#			return 1
+#		elif crazydiamond in ctx.author.roles:
+#			return 2
+
+# @commands.cooldown(1, getcooldown(), commands.BucketType.user)
+
 
 @client.command(aliases=["p"],brief="ORAAAA!")
 async def punch(ctx):
@@ -306,9 +337,5 @@ async def info(ctx):
 			except KeyError:
 				hp_embed2 = discord.Embed(title=f"{InfoOn}'s stand is {x.name}")
 				await ctx.channel.send(embed=hp_embed2)
-
-
-
-
 
 client.run(token)
