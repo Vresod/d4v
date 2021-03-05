@@ -6,23 +6,24 @@ import health
 import json
 import asyncio
 
-
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix='d4v!', intents=intents)
 
+with open("tokenfile", "r") as tokenfile:
+	token=tokenfile.read()
 
-
-@client.command()
-async def ping(ctx):
-	await ctx.send(f'Pong! {round(client.latency*1000)} ms')
-
+@client.event
+async def on_ready():
+	print('Dojyan!')
 
 @client.event
 async def on_member_join(member):
     cantstoptime = discord.utils.get(member.guild.roles, id=816382645964636180)
     await member.add_roles(cantstoptime)
 
-
+@client.command(aliases=["pi"],brief="get bot latency")
+async def ping(ctx):
+	await ctx.send(f'Pong! {round(client.latency*1000)} ms')
 
 @client.command(aliases=["sf","starfinger"],brief="finger goes brrr")
 async def star_finger(ctx,member):
@@ -34,14 +35,6 @@ async def star_finger(ctx,member):
 	await health.changehealth(user=target,add=0,subtract=10)
 	finger_embed = discord.Embed(title=f"{user} used Star Finger on {target}!", colour=discord.Colour(0x9b20c2))
 	await ctx.channel.send(embed=finger_embed)
-
-
-with open("tokenfile", "r") as tokenfile:
-	token=tokenfile.read()
-
-@client.event
-async def on_ready():
-	print('Dojyan!')
 
 @client.command(aliases=["r"],brief="reserve a stand")
 async def reserve(ctx):
@@ -74,10 +67,6 @@ async def reserve(ctx):
 			await ctx.author.add_roles(standwanted)
 			time_embed = discord.Embed(title=f"You now have {standwanted.name}", colour=discord.Colour(0xc5f164))
 			await ctx.channel.send(embed=time_embed)
-			
-#await ctx.channel.send(f"you now have {standwanted.name}!")
-
-
 
 @client.command(aliases=["ts","st","timestop","stoptime","stop_time"],brief="za warudo toki wo tomare")
 @commands.cooldown(rate=1, per=20, type=commands.BucketType.user)
@@ -125,34 +114,6 @@ async def time_stop(ctx):
 		time_embed = discord.Embed(title="Time resumes!", colour=discord.Colour(0x77140e))
 		await ctx.channel.send(embed=time_embed)
 		await ctx.channel.set_permissions(guild.get_role(816382645964636180), send_messages=True, read_messages=True)
-
-
-
-
-
-#def getcooldown(): 
-#	
-#	joe = discord.utils.get(client.guilds, id=814836159821250661)
-#	
-#	for x in joe.channels:
-#		ctx = x.history[0]
-#
-#		if not ctx.content.startswith("d4v!"):
-#			continue
-#
-#		if theworld in ctx.author.roles:
-#			return 3
-#		elif thehand in ctx.author.roles:
-#			return 4
-#		elif starplatinum in ctx.author.roles:
-#			return 3
-#		elif silverchariot in ctx.author.roles:
-#			return 1
-#		elif crazydiamond in ctx.author.roles:
-#			return 2
-
-# @commands.cooldown(1, getcooldown(), commands.BucketType.user)
-
 
 @client.command(aliases=["p"],brief="ORAAAA!")
 async def punch(ctx):
@@ -223,12 +184,6 @@ async def punch(ctx):
 				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}! DORA!", colour=discord.Colour(0xe277d5))
 				await ctx.channel.send(embed=attack_embed)
 				break
-
-
-
-
-
-################ barrage
 
 @client.command(aliases=["b"],brief="ORA ORA ORA ORA ORA!")
 async def barrage(ctx):
@@ -307,8 +262,6 @@ async def barrage(ctx):
 				attack_embed = discord.Embed(title=f"{puncher.name} used a barrage on {punched.name}! DORA-RA-RA-RA-RA-RA DORA!\nThe restoring effect also healed {puncher.name}", colour=discord.Colour(0xe277d5))
 				await ctx.channel.send(embed=attack_embed)
 				break
-
-
 
 @client.command(aliases=["i"],brief="get info on a user's health and stand")
 async def info(ctx):
