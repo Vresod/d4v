@@ -39,6 +39,23 @@ async def king_crimson(ctx):
 		await ctx.author.send(embed=kc_embed2)
 		await ctx.channel.purge(after=ctx.message)
 
+@client.command(aliases=["mrp","mrpresident"])
+@commands.cooldown(rate=2,per=5,type=commands.BucketType.user)
+async def mr_president(ctx):
+	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
+	mrpresident_inroom = discord.utils.get(ctx.guild.roles, id=817885610760208444)
+	if mrpresident in ctx.author.roles:
+		if mrpresident_inroom in ctx.author.roles:
+			mrpresident_embed = discord.Embed(title=f"{ctx.author.name} left Mr. President!", colour=discord.Colour(0x2f964d))
+			await ctx.channel.send(embed=mrpresident_embed)
+			await ctx.author.remove_roles(mrpresident_inroom)
+			return
+		if not mrpresident_inroom in ctx.author.roles:
+			mrpresident_embed = discord.Embed(title=f"{ctx.author.name} entered Mr. President!", colour=discord.Colour(0x2f964d))
+			await ctx.channel.send(embed=mrpresident_embed)
+			await ctx.author.add_roles(mrpresident_inroom)
+			return
+
 
 #@client.event
 #async def on_guild_join(guild):
