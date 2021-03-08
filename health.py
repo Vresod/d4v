@@ -9,14 +9,19 @@ async def changehealth(user, add, subtract):
 
 	id = str(user.id)
 	
-	try: # tries to run the below code
-		health[id] -= subtract # subtracts what it was told to
-		health[id] += add # adds what it was told to
-	except KeyError: # if it couldnt find an object in the dictionary with the user's id, it runs this code instead
-		health[id] = 200 # gives the user health
-		health[id] -= subtract # subtracts what it was told to
-		health[id] += add # adds what it was told to
-		print(f"{user} didnt have health but now they do")
+	mrpresident_inroom = discord.utils.get(user.guild.roles, id=817885610760208444)
+	if not mrpresident_inroom in user.roles:
+		try: # tries to run the below code
+			health[id] -= subtract # subtracts what it was told to
+			health[id] += add # adds what it was told to
+		except KeyError: # if it couldnt find an object in the dictionary with the user's id, it runs this code instead
+			health[id] = 200 # gives the user health
+			health[id] -= subtract # subtracts what it was told to
+			health[id] += add # adds what it was told to
+			print(f"{user} didnt have health but now they do")
+	if mrpresident_inroom in user.roles:
+		room_embed = discord.Embed(title="The target is inside Mr. President", colour=discord.Colour(0x2f964d))
+		await ctx.author.send(embed=room_embed)
 
 	with open("health.json", "wt") as healthraw: # opens health.json
 		healthraw.write(json.dumps(health)) # write the above changes to health.json

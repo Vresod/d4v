@@ -40,6 +40,28 @@ async def king_crimson(ctx):
 		await ctx.channel.purge(after=ctx.message)
 
 
+#@client.event
+#async def on_guild_join(guild):
+#  mrpresident = discord.utils.get(guild.roles, id=817885472734838795)
+#  mrpresident_inroom = discord.utils.get(guild.roles, id=817885610760208444)
+#  cantstoptime = discord.utils.get(guild.roles, id=816382645964636180)
+#  mrpresident_perms = {
+#    guild.default_role: discord.PermissionOverwrite(view_channel=False),
+#    guild.default_role: discord.PermissionOverwrite(read_message_history=False),
+#    guild.default_role: discord.PermissionOverwrite(send_messages=False),
+#    cantstoptime: discord.PermissionOverwrite(view_channel=False),
+#    cantstoptime: discord.PermissionOverwrite(read_message_history=False),
+#   	cantstoptime: discord.PermissionOverwrite(send_messages=False),
+#    mrpresident: discord.PermissionOverwrite(view_channel=True),
+#    mrpresident: discord.PermissionOverwrite(read_message_history=True),
+#    mrpresident: discord.PermissionOverwrite(send_messages=False),
+#    mrpresident_inroom: discord.PermissionOverwrite(read_message_history=True),
+#    mrpresident_inroom: discord.PermissionOverwrite(view_channel=True),
+#    mrpresident_inroom: discord.PermissionOverwrite(send_messages=True)
+#  }
+#  await guild.create_text_channel('mr_president_room',overwrites=mrpresident_perms)
+
+
 
 @client.event
 async def on_member_join(member):
@@ -72,9 +94,11 @@ async def reserve(ctx):
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 	kingcrimson = discord.utils.get(ctx.guild.roles, id=817441099173199923)
-
+	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
 	cantstoptime = discord.utils.get(ctx.guild.roles, id=816382645964636180)
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson]
+	
+
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident]
 	for x in stands:
 		if x in ctx.author.roles:
 			time_embed = discord.Embed(title=f"You lost {x.name}", colour=discord.Colour(0xf3564e))
@@ -151,8 +175,10 @@ async def punch(ctx):
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 	kingcrimson = discord.utils.get(ctx.guild.roles, id=817441099173199923)
+	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
+	mrpresident_inroom = discord.utils.get(ctx.guild.roles, id=817885610760208444)
 
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident]
 
 	puncher = ctx.author
 
@@ -220,8 +246,26 @@ async def punch(ctx):
 				previous_message = message
 				punched = previous_message.author
 				await health.changehealth(user=punched, add=0, subtract=14)
-				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}! WRYA!", colour=discord.Colour(0xb90d0d))
+				attack_embed = discord.Embed(title=f"{puncher.name} neck chopped {punched.name}! WRYA!", colour=discord.Colour(0xb90d0d))
 				await ctx.channel.send(embed=attack_embed)
+				break
+	if mrpresident in puncher.roles:
+		async for message in ctx.channel.history():
+			if(message == ctx.message) or (message.author == ctx.message.author) or (message.author == client.user):
+				continue
+			else:
+				previous_message = message
+				punched = previous_message.author
+				await health.changehealth(user=punched, add=0, subtract=10)
+				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}, now they are both inside Mr. President!", colour=discord.Colour(0x2f964d))
+				await ctx.channel.send(embed=attack_embed)
+				await punched.add_roles(mrpresident_inroom)
+				await ctx.author.add_roles(mrpresident_inroom)
+				await asyncio.sleep(15)
+				attack_embed = discord.Embed(title=f"{puncher.name} and {punched.name} left Mr. President!", colour=discord.Colour(0x2f964d))
+				await ctx.channel.send(embed=attack_embed)
+				await punched.remove_roles(mrpresident_inroom)
+				await ctx.author.remove_roles(mrpresident_inroom)
 				break
 
 
@@ -235,8 +279,10 @@ async def barrage(ctx):
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 	kingcrimson = discord.utils.get(ctx.guild.roles, id=817441099173199923)
+	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
+	mrpresident_inroom = discord.utils.get(ctx.guild.roles, id=817885610760208444)
 
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident]
 
 	puncher = ctx.author
 
@@ -326,6 +372,22 @@ async def barrage(ctx):
 				await health.changehealth(user=punched, add=0, subtract=40)
 				attack_embed = discord.Embed(title=f"{puncher.name} donuted {punched.name}!", colour=discord.Colour(0xb90d0d))
 				await ctx.channel.send(embed=attack_embed)
+				break
+	if mrpresident in puncher.roles:
+		async for message in ctx.channel.history():
+			if(message == ctx.message) or (message.author == ctx.message.author) or (message.author == client.user):
+				continue
+			else:
+				previous_message = message
+				punched = previous_message.author
+				await health.changehealth(user=punched, add=0, subtract=20)
+				attack_embed = discord.Embed(title=f"{puncher.name} barraged {punched.name}, now {puncher.name} is inside Mr. President!", colour=discord.Colour(0x2f964d))
+				await ctx.channel.send(embed=attack_embed)
+				await ctx.author.add_roles(mrpresident_inroom)
+				await asyncio.sleep(10)
+				attack_embed = discord.Embed(title=f"{puncher.name} left Mr. President!", colour=discord.Colour(0x2f964d))
+				await ctx.channel.send(embed=attack_embed)
+				await ctx.author.remove_roles(mrpresident_inroom)
 				break
 
 
