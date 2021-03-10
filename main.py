@@ -22,6 +22,11 @@ async def on_ready():
 
 
 
+
+
+
+
+
 @client.command(aliases=["kc","kingcrimson","itjustworks"])
 @commands.cooldown(rate=1,per=25,type=commands.BucketType.user)
 async def king_crimson(ctx):
@@ -113,9 +118,10 @@ async def reserve(ctx):
 	kingcrimson = discord.utils.get(ctx.guild.roles, id=817441099173199923)
 	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
 	cantstoptime = discord.utils.get(ctx.guild.roles, id=816382645964636180)
+	heavensdoor = discord.utils.get(ctx.guild.roles, id=818585440352469073)
 	
 
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor]
 	for x in stands:
 		if x in ctx.author.roles:
 			time_embed = discord.Embed(title=f"You lost {x.name}", colour=discord.Colour(0xf3564e))
@@ -194,8 +200,10 @@ async def punch(ctx):
 	kingcrimson = discord.utils.get(ctx.guild.roles, id=817441099173199923)
 	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
 	mrpresident_inroom = discord.utils.get(ctx.guild.roles, id=817885610760208444)
+	heavensdoor = discord.utils.get(ctx.guild.roles, id=818585440352469073)
+	hd_3 = discord.utils.get(ctx.guild.roles, id=818588024824659969)
 
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor]
 
 	puncher = ctx.author
 
@@ -284,6 +292,17 @@ async def punch(ctx):
 				await punched.remove_roles(mrpresident_inroom)
 				await ctx.author.remove_roles(mrpresident_inroom)
 				break
+	if heavensdoor in puncher.roles:
+		async for message in ctx.channel.history():
+			if(message == ctx.message) or (message.author == ctx.message.author) or (message.author == client.user):
+				continue
+			else:
+				previous_message = message
+				punched = previous_message.author
+				await health.changehealth(user=punched, add=0, subtract=10)
+				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}!", colour=discord.Colour(0xfff247))
+				await ctx.channel.send(embed=attack_embed)
+				break
 
 
 
@@ -298,8 +317,9 @@ async def barrage(ctx):
 	kingcrimson = discord.utils.get(ctx.guild.roles, id=817441099173199923)
 	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
 	mrpresident_inroom = discord.utils.get(ctx.guild.roles, id=817885610760208444)
+	heavensdoor = discord.utils.get(ctx.guild.roles, id=818585440352469073)
 
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor]
 
 	puncher = ctx.author
 
@@ -406,6 +426,21 @@ async def barrage(ctx):
 				await ctx.channel.send(embed=attack_embed)
 				await ctx.author.remove_roles(mrpresident_inroom)
 				break
+	if heavensdoor in puncher.roles:
+		async for message in ctx.channel.history():
+			if(message == ctx.message) or (message.author == ctx.message.author) or (message.author == client.user):
+				continue
+			else:
+				previous_message = message
+				punched = previous_message.author
+				await health.changehealth(user=punched, add=0, subtract=6)
+				await health.changehealth(user=punched, add=0, subtract=6)
+				await health.changehealth(user=punched, add=0, subtract=6)
+				attack_embed = discord.Embed(title=f"{puncher.name} barraged {punched.name}!", colour=discord.Colour(0xfff247))
+				await ctx.channel.send(embed=attack_embed)
+				break
+
+
 
 
 
@@ -424,8 +459,9 @@ async def info(ctx):
 	silverchariot = discord.utils.get(ctx.guild.roles, id=816244947224100864)
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 	kingcrimson = discord.utils.get(ctx.guild.roles, id=817441099173199923)
+	heavensdoor = discord.utils.get(ctx.guild.roles, id=818585440352469073)
 
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, heavensdoor]
 
 	if ctx.message.mentions == []:
 		InfoOn = ctx.author
