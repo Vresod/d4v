@@ -119,9 +119,10 @@ async def reserve(ctx):
 	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
 	cantstoptime = discord.utils.get(ctx.guild.roles, id=816382645964636180)
 	heavensdoor = discord.utils.get(ctx.guild.roles, id=818585440352469073)
+	killerqueen = discord.utils.get(ctx.guild.roles, id=819249703291322450)
 	
 
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor, killerqueen]
 	for x in stands:
 		if x in ctx.author.roles:
 			time_embed = discord.Embed(title=f"You lost {x.name}", colour=discord.Colour(0xf3564e))
@@ -189,6 +190,7 @@ async def time_stop(ctx):
 		await ctx.channel.send(embed=time_embed)
 		await ctx.channel.set_permissions(guild.get_role(816382645964636180), send_messages=True, read_messages=True)
 
+kq_list = []
 @client.command(aliases=["p"],brief="ORAAAA!")
 async def punch(ctx):
 
@@ -202,8 +204,9 @@ async def punch(ctx):
 	mrpresident_inroom = discord.utils.get(ctx.guild.roles, id=817885610760208444)
 	heavensdoor = discord.utils.get(ctx.guild.roles, id=818585440352469073)
 	hd_3 = discord.utils.get(ctx.guild.roles, id=818588024824659969)
+	killerqueen = discord.utils.get(ctx.guild.roles, id=819249703291322450)
 
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor, killerqueen]
 
 	puncher = ctx.author
 
@@ -303,6 +306,26 @@ async def punch(ctx):
 				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}!", colour=discord.Colour(0xfff247))
 				await ctx.channel.send(embed=attack_embed)
 				break
+	if killerqueen in puncher.roles:
+		async for message in ctx.channel.history():
+			if(message == ctx.message) or (message.author == ctx.message.author) or (message.author == client.user):
+				continue
+			else:
+				if kq_list == []:
+					previous_message = message
+					punched = previous_message.author
+					attack_embed = discord.Embed(title=f"{puncher.name} turned {punched.name}'s message into a bomb, use the punch again to detonate", colour=discord.Colour(0xdba4d3))
+					await ctx.channel.send(embed=attack_embed)
+					kq_list.append(previous_message)
+					await previous_message.add_reaction("<a:KillerQueenClick:819250902925180989>")
+					break
+				if not kq_list == []:
+					await message.delete()
+					kq_list.pop(0)
+					kq_embed = discord.Embed(title=f"Bomb Detonated!", colour=discord.Colour(0xdba4d3))
+					await ctx.channel.send(embed=kq_embed)
+					kq_embed2 = discord.Embed(title=f"You detonated {punched.name}'s message dealing 30 damage", colour=discord.Colour(0xdba4d3))
+					await ctx.author.send(embed=kq_embed2)
 
 
 
@@ -318,8 +341,9 @@ async def barrage(ctx):
 	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
 	mrpresident_inroom = discord.utils.get(ctx.guild.roles, id=817885610760208444)
 	heavensdoor = discord.utils.get(ctx.guild.roles, id=818585440352469073)
+	killerqueen = discord.utils.get(ctx.guild.roles, id=819249703291322450)
 
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor, killerqueen]
 
 	puncher = ctx.author
 
@@ -439,6 +463,21 @@ async def barrage(ctx):
 				attack_embed = discord.Embed(title=f"{puncher.name} barraged {punched.name}!", colour=discord.Colour(0xfff247))
 				await ctx.channel.send(embed=attack_embed)
 				break
+	if killerqueen in puncher.roles:
+		async for message in ctx.channel.history():
+			if(message == ctx.message) or (message.author == ctx.message.author) or (message.author == client.user):
+				continue
+			else:
+				previous_message = message
+				punched = previous_message.author
+				await health.changehealth(user=punched, add=0, subtract=5)
+				await health.changehealth(user=punched, add=0, subtract=5)
+				await health.changehealth(user=punched, add=0, subtract=5)
+				await health.changehealth(user=punched, add=0, subtract=5)
+				await health.changehealth(user=punched, add=0, subtract=5)
+				attack_embed = discord.Embed(title=f"{puncher.name} barraged {punched.name}! SHIBOBOBOBOBO", colour=discord.Colour(0xdba4d3))
+				await ctx.channel.send(embed=attack_embed)
+				break
 
 
 
@@ -460,8 +499,9 @@ async def info(ctx):
 	crazydiamond = discord.utils.get(ctx.guild.roles, id=816602875014676480)
 	kingcrimson = discord.utils.get(ctx.guild.roles, id=817441099173199923)
 	heavensdoor = discord.utils.get(ctx.guild.roles, id=818585440352469073)
+	killerqueen = discord.utils.get(ctx.guild.roles, id=819249703291322450)
 
-	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, heavensdoor]
+	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, heavensdoor, killerqueen]
 
 	if ctx.message.mentions == []:
 		InfoOn = ctx.author
