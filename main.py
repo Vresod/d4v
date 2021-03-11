@@ -2,13 +2,12 @@ import time
 from discord.ext import commands
 import discord
 import random
-import health
 import json
 import asyncio
-import extra
+from extra import *
 
 intents = discord.Intents.all()
-client = commands.Bot(command_prefix='d4v!', intents=intents, help_command=extra.MyHelpCommand())
+client = commands.Bot(command_prefix='d4v!', intents=intents, help_command=MyHelpCommand())
 
 with open("tokenfile", "r") as tokenfile:
 	token=tokenfile.read()
@@ -18,12 +17,11 @@ with open("tokenfile", "r") as tokenfile:
 @client.event
 async def on_ready():
     print('Dojyan!')
-    kc_list = []
 
-
-
-
-
+@client.event
+async def on_member_join(member):
+    cantstoptime = discord.utils.get(member.guild.roles, id=816382645964636180)
+    await member.add_roles(cantstoptime)
 
 
 
@@ -33,62 +31,34 @@ async def king_crimson(ctx):
 	kingcrimson = discord.utils.get(ctx.guild.roles, id=817441099173199923)
 	if kingcrimson in ctx.author.roles:
 		kc_list = []
-		kc_ability = []
-		await ctx.channel.purge(limit=1)
+		kc_ability = ""
+		await ctx.message.delete()
 		kc_embed = discord.Embed(title="King Crimson activated!", colour=discord.Colour(0xb90d0d))
 		await ctx.author.send(embed=kc_embed)
 		kc_ability = 1
 		await asyncio.sleep(10)
 		kc_ability = 0
-		kc_embed2 = discord.Embed(title="Time has skipped!", colour=discord.Colour(0xb90d0d))
-		await ctx.author.send(embed=kc_embed2)
+		kc_embed = discord.Embed(title="Time has skipped!", colour=discord.Colour(0xb90d0d))
+		await ctx.author.send(embed=kc_embed)
 		await ctx.channel.purge(after=ctx.message)
 
-@client.command(aliases=["mrp","mrpresident"])
+@client.command(aliases=["mrp","mrpresident","mp"])
 @commands.cooldown(rate=2,per=5,type=commands.BucketType.user)
 async def mr_president(ctx):
 	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
 	mrpresident_inroom = discord.utils.get(ctx.guild.roles, id=817885610760208444)
 	if mrpresident in ctx.author.roles:
 		if mrpresident_inroom in ctx.author.roles:
-			mrpresident_embed = discord.Embed(title=f"{ctx.author.name} left Mr. President!", colour=discord.Colour(0x2f964d))
+			mrpresident_embed = discord.Embed(title=f"{ctx.author.display_name} left Mr. President!", colour=discord.Colour(0x2f964d))
 			await ctx.channel.send(embed=mrpresident_embed)
 			await ctx.author.remove_roles(mrpresident_inroom)
 			return
-		if not mrpresident_inroom in ctx.author.roles:
-			mrpresident_embed = discord.Embed(title=f"{ctx.author.name} entered Mr. President!", colour=discord.Colour(0x2f964d))
+		else mrpresident_inroom in ctx.author.roles:
+			mrpresident_embed = discord.Embed(title=f"{ctx.author.display_name} entered Mr. President!", colour=discord.Colour(0x2f964d))
 			await ctx.channel.send(embed=mrpresident_embed)
 			await ctx.author.add_roles(mrpresident_inroom)
 			return
 
-
-#@client.event
-#async def on_guild_join(guild):
-#  mrpresident = discord.utils.get(guild.roles, id=817885472734838795)
-#  mrpresident_inroom = discord.utils.get(guild.roles, id=817885610760208444)
-#  cantstoptime = discord.utils.get(guild.roles, id=816382645964636180)
-#  mrpresident_perms = {
-#    guild.default_role: discord.PermissionOverwrite(view_channel=False),
-#    guild.default_role: discord.PermissionOverwrite(read_message_history=False),
-#    guild.default_role: discord.PermissionOverwrite(send_messages=False),
-#    cantstoptime: discord.PermissionOverwrite(view_channel=False),
-#    cantstoptime: discord.PermissionOverwrite(read_message_history=False),
-#   	cantstoptime: discord.PermissionOverwrite(send_messages=False),
-#    mrpresident: discord.PermissionOverwrite(view_channel=True),
-#    mrpresident: discord.PermissionOverwrite(read_message_history=True),
-#    mrpresident: discord.PermissionOverwrite(send_messages=False),
-#    mrpresident_inroom: discord.PermissionOverwrite(read_message_history=True),
-#    mrpresident_inroom: discord.PermissionOverwrite(view_channel=True),
-#    mrpresident_inroom: discord.PermissionOverwrite(send_messages=True)
-#  }
-#  await guild.create_text_channel('mr_president_room',overwrites=mrpresident_perms)
-
-
-
-@client.event
-async def on_member_join(member):
-    cantstoptime = discord.utils.get(member.guild.roles, id=816382645964636180)
-    await member.add_roles(cantstoptime)
 
 @client.command(aliases=["pi"],brief="get bot latency")
 async def ping(ctx):
@@ -96,14 +66,14 @@ async def ping(ctx):
 
 @client.command(aliases=["sf","starfinger"],brief="finger goes brrr")
 async def star_finger(ctx,member):
-	target = ctx.message.mentions[0]
-	user = ctx.author
-	starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
-	if not starplatinum in ctx.author.roles:
-		return
-	await health.changehealth(user=target,add=0,subtract=10)
-	finger_embed = discord.Embed(title=f"{user} used Star Finger on {target}!", colour=discord.Colour(0x9b20c2))
-	await ctx.channel.send(embed=finger_embed)
+	if starplatinum in ctx.author.roles:
+		target = ctx.message.mentions[0]
+		user = ctx.author
+		starplatinum = discord.utils.get(ctx.guild.roles, id=816244946365186048)
+	
+		await changehealth(user=target,add=0,subtract=10)
+		finger_embed = discord.Embed(title=f"{user.display_name} used Star Finger on {target.display_name}!", colour=discord.Colour(0x9b20c2))
+		await ctx.channel.send(embed=finger_embed)
 
 @client.command(aliases=["r"],brief="reserve a stand")
 async def reserve(ctx):
@@ -125,7 +95,7 @@ async def reserve(ctx):
 	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor, killerqueen]
 	for x in stands:
 		if x in ctx.author.roles:
-			time_embed = discord.Embed(title=f"You lost {x.name}", colour=discord.Colour(0xf3564e))
+			time_embed = 
 			await ctx.channel.send(embed=time_embed)
 			await ctx.author.add_roles(cantstoptime)
 			await ctx.author.remove_roles(x)
@@ -142,6 +112,8 @@ async def reserve(ctx):
 			await ctx.author.add_roles(standwanted)
 			time_embed = discord.Embed(title=f"You now have {standwanted.name}", colour=discord.Colour(0xc5f164))
 			await ctx.channel.send(embed=time_embed)
+		else:
+			stand_embed = discord.Embed(title=f"{standwanted.members[0].display_name} already has {standwanted.name}", colour=discord.Colour(0xf3564e))
 
 @client.command(aliases=["ts","st","timestop","stoptime","stop_time"],brief="za warudo toki wo tomare")
 @commands.cooldown(rate=1, per=20, type=commands.BucketType.user)
@@ -217,8 +189,8 @@ async def punch(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=17)
-				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}! MUDA!", colour=discord.Colour(0xffdc00))
+				await changehealth(user=punched, add=0, subtract=17)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} punched {punched.display_name}! MUDA!", colour=discord.Colour(0xffdc00))
 				await ctx.channel.send(embed=attack_embed)
 				break
 
@@ -229,8 +201,8 @@ async def punch(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=15)
-				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}! BBVV!", colour=discord.Colour(0x5957db))
+				await changehealth(user=punched, add=0, subtract=15)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} punched {punched.display_name}! BBVV!", colour=discord.Colour(0x5957db))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if starplatinum in puncher.roles:
@@ -240,8 +212,8 @@ async def punch(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=20)
-				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}! ORA!", colour=discord.Colour(0x9b20c2))
+				await changehealth(user=punched, add=0, subtract=20)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} punched {punched.display_name}! ORA!", colour=discord.Colour(0x9b20c2))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if silverchariot in puncher.roles:
@@ -251,8 +223,8 @@ async def punch(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=12)
-				attack_embed = discord.Embed(title=f"{puncher.name} attacked {punched.name}!", colour=discord.Colour(0xf5f5f5))
+				await changehealth(user=punched, add=0, subtract=12)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} attacked {punched.display_name}!", colour=discord.Colour(0xf5f5f5))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if crazydiamond in puncher.roles:
@@ -262,8 +234,8 @@ async def punch(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=15)
-				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}! DORA!", colour=discord.Colour(0xe277d5))
+				await changehealth(user=punched, add=0, subtract=15)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} punched {punched.display_name}! DORA!", colour=discord.Colour(0xe277d5))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if kingcrimson in puncher.roles:
@@ -273,8 +245,8 @@ async def punch(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=14)
-				attack_embed = discord.Embed(title=f"{puncher.name} neck chopped {punched.name}! WRYA!", colour=discord.Colour(0xb90d0d))
+				await changehealth(user=punched, add=0, subtract=14)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} neck chopped {punched.display_name}! WRYA!", colour=discord.Colour(0xb90d0d))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if mrpresident in puncher.roles:
@@ -284,13 +256,13 @@ async def punch(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=10)
-				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}, now they are both inside Mr. President!", colour=discord.Colour(0x2f964d))
+				await changehealth(user=punched, add=0, subtract=10)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} punched {punched.display_name}, now they are both inside Mr. President!", colour=discord.Colour(0x2f964d))
 				await ctx.channel.send(embed=attack_embed)
 				await punched.add_roles(mrpresident_inroom)
 				await ctx.author.add_roles(mrpresident_inroom)
 				await asyncio.sleep(15)
-				attack_embed = discord.Embed(title=f"{puncher.name} and {punched.name} left Mr. President!", colour=discord.Colour(0x2f964d))
+				attack_embed = discord.Embed(title=f"{puncher.display_name} and {punched.display_name} left Mr. President!", colour=discord.Colour(0x2f964d))
 				await ctx.channel.send(embed=attack_embed)
 				await punched.remove_roles(mrpresident_inroom)
 				await ctx.author.remove_roles(mrpresident_inroom)
@@ -302,8 +274,8 @@ async def punch(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=10)
-				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}!", colour=discord.Colour(0xfff247))
+				await changehealth(user=punched, add=0, subtract=10)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} punched {punched.display_name}!", colour=discord.Colour(0xfff247))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if killerqueen in puncher.roles:
@@ -314,7 +286,7 @@ async def punch(ctx):
 				if kq_list == []:
 					previous_message = message
 					punched = previous_message.author
-					attack_embed = discord.Embed(title=f"{puncher.name} turned {punched.name}'s message into a bomb, use the punch again to detonate", colour=discord.Colour(0xdba4d3))
+					attack_embed = discord.Embed(title=f"{puncher.display_name} turned {punched.display_name}'s message into a bomb, use the punch again to detonate", colour=discord.Colour(0xdba4d3))
 					await ctx.channel.send(embed=attack_embed)
 					kq_list.append(previous_message)
 					await previous_message.add_reaction("<a:KillerQueenClick:819250902925180989>")
@@ -324,10 +296,8 @@ async def punch(ctx):
 					kq_list.pop(0)
 					kq_embed = discord.Embed(title=f"Bomb Detonated!", colour=discord.Colour(0xdba4d3))
 					await ctx.channel.send(embed=kq_embed)
-					kq_embed2 = discord.Embed(title=f"You detonated {punched.name}'s message dealing 30 damage", colour=discord.Colour(0xdba4d3))
+					kq_embed2 = discord.Embed(title=f"You detonated {punched.display_name}'s message dealing 30 damage", colour=discord.Colour(0xdba4d3))
 					await ctx.author.send(embed=kq_embed2)
-
-
 
 @client.command(aliases=["b"],brief="ORA ORA ORA ORA ORA!")
 async def barrage(ctx):
@@ -354,13 +324,13 @@ async def barrage(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=4)
-				attack_embed = discord.Embed(title=f"{puncher.name} punched {punched.name}! MUDA MUDA MUDA MUDA!", colour=discord.Colour(0xffdc00))
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=4)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} punched {punched.display_name}! MUDA MUDA MUDA MUDA!", colour=discord.Colour(0xffdc00))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if starplatinum in puncher.roles:
@@ -370,13 +340,13 @@ async def barrage(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=5)
-				await health.changehealth(user=punched, add=0, subtract=5)
-				await health.changehealth(user=punched, add=0, subtract=5)
-				attack_embed = discord.Embed(title=f"{puncher.name} used a barrage on {punched.name}! ORA ORA ORA ORA ORA!", colour=discord.Colour(0x9b20c2))
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=5)
+				await changehealth(user=punched, add=0, subtract=5)
+				await changehealth(user=punched, add=0, subtract=5)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} used a barrage on {punched.display_name}! ORA ORA ORA ORA ORA!", colour=discord.Colour(0x9b20c2))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if thehand in puncher.roles:
@@ -386,9 +356,9 @@ async def barrage(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=30)
+				await changehealth(user=punched, add=0, subtract=30)
 				await ctx.channel.purge(limit=4)
-				attack_embed = discord.Embed(title=f"{puncher.name} erased {punched.name}! BBBBBBBVVVVV!", colour=discord.Colour(0x5957db))
+				attack_embed = discord.Embed(title=f"{puncher.display_name} erased {punched.display_name}! BBBBBBBVVVVV!", colour=discord.Colour(0x5957db))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if silverchariot in puncher.roles:
@@ -398,12 +368,12 @@ async def barrage(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=2)
-				await health.changehealth(user=punched, add=0, subtract=2)
-				await health.changehealth(user=punched, add=0, subtract=3)
-				await health.changehealth(user=punched, add=0, subtract=3)
-				await health.changehealth(user=punched, add=0, subtract=3)
-				attack_embed = discord.Embed(title=f"{puncher.name} attacked {punched.name}! HORA HORA HORA HORA!", colour=discord.Colour(0xf5f5f5))
+				await changehealth(user=punched, add=0, subtract=2)
+				await changehealth(user=punched, add=0, subtract=2)
+				await changehealth(user=punched, add=0, subtract=3)
+				await changehealth(user=punched, add=0, subtract=3)
+				await changehealth(user=punched, add=0, subtract=3)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} attacked {punched.display_name}! HORA HORA HORA HORA!", colour=discord.Colour(0xf5f5f5))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if crazydiamond in puncher.roles:
@@ -413,14 +383,14 @@ async def barrage(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=4)
-				await health.changehealth(user=punched, add=0, subtract=5)
-				await health.changehealth(user=punched, add=0, subtract=5)
-				await health.changehealth(user=puncher, add=15, subtract=0)
-				attack_embed = discord.Embed(title=f"{puncher.name} used a barrage on {punched.name}! DORA-RA-RA-RA-RA-RA DORA!\nThe restoring effect also healed {puncher.name}", colour=discord.Colour(0xe277d5))
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=4)
+				await changehealth(user=punched, add=0, subtract=5)
+				await changehealth(user=punched, add=0, subtract=5)
+				await changehealth(user=puncher, add=15, subtract=0)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} used a barrage on {punched.display_name}! DORA-RA-RA-RA-RA-RA DORA!\nThe restoring effect also healed {puncher.display_name}", colour=discord.Colour(0xe277d5))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if kingcrimson in puncher.roles:
@@ -430,8 +400,8 @@ async def barrage(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=40)
-				attack_embed = discord.Embed(title=f"{puncher.name} donuted {punched.name}!", colour=discord.Colour(0xb90d0d))
+				await changehealth(user=punched, add=0, subtract=40)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} donuted {punched.display_name}!", colour=discord.Colour(0xb90d0d))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if mrpresident in puncher.roles:
@@ -441,12 +411,12 @@ async def barrage(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=20)
-				attack_embed = discord.Embed(title=f"{puncher.name} barraged {punched.name}, now {puncher.name} is inside Mr. President!", colour=discord.Colour(0x2f964d))
+				await changehealth(user=punched, add=0, subtract=20)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} barraged {punched.display_name}, now {puncher.display_name} is inside Mr. President!", colour=discord.Colour(0x2f964d))
 				await ctx.channel.send(embed=attack_embed)
 				await ctx.author.add_roles(mrpresident_inroom)
 				await asyncio.sleep(10)
-				attack_embed = discord.Embed(title=f"{puncher.name} left Mr. President!", colour=discord.Colour(0x2f964d))
+				attack_embed = discord.Embed(title=f"{puncher.display_name} left Mr. President!", colour=discord.Colour(0x2f964d))
 				await ctx.channel.send(embed=attack_embed)
 				await ctx.author.remove_roles(mrpresident_inroom)
 				break
@@ -457,10 +427,10 @@ async def barrage(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=6)
-				await health.changehealth(user=punched, add=0, subtract=6)
-				await health.changehealth(user=punched, add=0, subtract=6)
-				attack_embed = discord.Embed(title=f"{puncher.name} barraged {punched.name}!", colour=discord.Colour(0xfff247))
+				await changehealth(user=punched, add=0, subtract=6)
+				await changehealth(user=punched, add=0, subtract=6)
+				await changehealth(user=punched, add=0, subtract=6)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} barraged {punched.display_name}!", colour=discord.Colour(0xfff247))
 				await ctx.channel.send(embed=attack_embed)
 				break
 	if killerqueen in puncher.roles:
@@ -470,20 +440,14 @@ async def barrage(ctx):
 			else:
 				previous_message = message
 				punched = previous_message.author
-				await health.changehealth(user=punched, add=0, subtract=5)
-				await health.changehealth(user=punched, add=0, subtract=5)
-				await health.changehealth(user=punched, add=0, subtract=5)
-				await health.changehealth(user=punched, add=0, subtract=5)
-				await health.changehealth(user=punched, add=0, subtract=5)
-				attack_embed = discord.Embed(title=f"{puncher.name} barraged {punched.name}! SHIBOBOBOBOBO", colour=discord.Colour(0xdba4d3))
+				await changehealth(user=punched, add=0, subtract=5)
+				await changehealth(user=punched, add=0, subtract=5)
+				await changehealth(user=punched, add=0, subtract=5)
+				await changehealth(user=punched, add=0, subtract=5)
+				await changehealth(user=punched, add=0, subtract=5)
+				attack_embed = discord.Embed(title=f"{puncher.display_name} barraged {punched.display_name}! SHIBOBOBOBOBO", colour=discord.Colour(0xdba4d3))
 				await ctx.channel.send(embed=attack_embed)
 				break
-
-
-
-
-
-
 
 
 @client.command(aliases=["i"],brief="get info on a user's health and stand")
@@ -511,10 +475,10 @@ async def info(ctx):
 	for x in stands:
 		if x in InfoOn.roles:
 			try:
-				hp_embed = discord.Embed(title=f"{InfoOn} has `{health[str(InfoOn.id)]}` health\n{InfoOn}'s stand is {x.name}")
+				hp_embed = discord.Embed(title=f"{InfoOn.display_name} has `{health[str(InfoOn.id)]}` health\n{InfoOn.display_name}'s stand is {x.name}")
 				await ctx.channel.send(embed=hp_embed)
 			except KeyError:
-				hp_embed2 = discord.Embed(title=f"{InfoOn}'s stand is {x.name}")
+				hp_embed2 = discord.Embed(title=f"{InfoOn.display_name}'s stand is {x.name}")
 				await ctx.channel.send(embed=hp_embed2)
 
 client.run(token)
