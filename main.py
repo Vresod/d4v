@@ -46,14 +46,14 @@ async def king_crimson(ctx):
 @commands.cooldown(rate=2,per=5,type=commands.BucketType.user)
 async def mr_president(ctx):
 	mrpresident = discord.utils.get(ctx.guild.roles, id=817885472734838795)
-	mrpresident_inroom = discord.utils.get(ctx.guild.roles, id=817885610760208444)
+	mrpresidentinroom = discord.utils.get(ctx.guild.roles, id=817885610760208444)
 	if mrpresident in ctx.author.roles:
-		if mrpresident_inroom in ctx.author.roles:
+		if mrpresidentinroom in ctx.author.roles:
 			mrpresident_embed = discord.Embed(title=f"{ctx.author.display_name} left Mr. President!", colour=discord.Colour(0x2f964d))
 			await ctx.channel.send(embed=mrpresident_embed)
 			await ctx.author.remove_roles(mrpresident_inroom)
 			return
-		else mrpresident_inroom in ctx.author.roles:
+		else:
 			mrpresident_embed = discord.Embed(title=f"{ctx.author.display_name} entered Mr. President!", colour=discord.Colour(0x2f964d))
 			await ctx.channel.send(embed=mrpresident_embed)
 			await ctx.author.add_roles(mrpresident_inroom)
@@ -95,7 +95,7 @@ async def reserve(ctx):
 	stands = [thehand, theworld, starplatinum, silverchariot, crazydiamond, kingcrimson, mrpresident, heavensdoor, killerqueen]
 	for x in stands:
 		if x in ctx.author.roles:
-			time_embed = 
+			time_embed = discord.Embed(title=f"You have lost {x.name}", colour=discord.Colour(0xc5f164))
 			await ctx.channel.send(embed=time_embed)
 			await ctx.author.add_roles(cantstoptime)
 			await ctx.author.remove_roles(x)
