@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import json
 
-# code stolen from Jackbotgames/jackbot who modified it from Rapptz/discord.py
+# code borrowed without permission from Jackbotgames/jackbot who modified it from Rapptz/discord.py
 class MyHelpCommand(commands.DefaultHelpCommand):
 	def __init__(self, **options):
 		self.paginator = commands.Paginator()
